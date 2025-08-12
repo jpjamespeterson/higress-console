@@ -115,23 +115,21 @@ const ConsumerForm: React.FC = forwardRef((props, ref) => {
                       {fields.map((field, index) => (
                         <Form.Item
                           required={false}
-                          key={index}
-                          style={{ marginBottom: '0.5rem' }}
+                          key={field.key}
                         >
-                          <Form.Item
-                            {...field}
-                            validateTrigger={['onChange', 'onBlur']}
-                            rules={[{ required: true, message: t("consumer.consumerForm.authTokenRequired") || '' }]}
-                            noStyle
-                          >
-                            <Input style={{ width: '85%' }} />
-                          </Form.Item>
-                          <div style={{ display: "inline-block", width: '15%', textAlign: 'right' }}>
+                          <Space.Compact style={{ width: '100%' }}>
+                            <Form.Item
+                              {...field}
+                              validateTrigger={['onChange', 'onBlur']}
+                              rules={[{ required: true, message: t("consumer.consumerForm.authTokenRequired") || '' }]}
+                              noStyle
+                            >
+                              <Input />
+                            </Form.Item>
                             <Button
                               onClick={() => randomizeKeyAuthToken(index)}
                               title={t("consumer.randomGeneration") || ''}
                               icon={<ReloadOutlined />}
-                              style={{ marginRight: '0.5rem' }}
                             />
                             <Button
                               type="dashed"
@@ -139,7 +137,7 @@ const ConsumerForm: React.FC = forwardRef((props, ref) => {
                               onClick={() => remove(field.name)}
                               icon={<MinusCircleOutlined />}
                             />
-                          </div>
+                          </Space.Compact>
                         </Form.Item>
                       ))}
 

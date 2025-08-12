@@ -7,7 +7,7 @@ import { getGatewayDomains, getGatewayServices } from '@/services';
 import { getConsumers } from '@/services/consumer';
 import { QuestionCircleOutlined, RedoOutlined } from '@ant-design/icons';
 import { useRequest } from 'ahooks';
-import { Checkbox, Form, Input, Select, Switch, Tooltip, Button } from 'antd';
+import { Checkbox, Form, Input, Select, Switch, Tooltip, Button, Space } from 'antd';
 import { uniqueId } from "lodash";
 import React, { forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -183,7 +183,7 @@ const RouteForm: React.FC = forwardRef((props, ref) => {
         tooltip={t('route.routeForm.matchTypeTooltip')}
       >
         <Form.Item label={t('route.routeForm.path')} required>
-          <Input.Group compact>
+          <Space.Compact style={{ width: '100%' }}>
             <Form.Item
               name={['path', 'matchType']}
               noStyle
@@ -195,7 +195,6 @@ const RouteForm: React.FC = forwardRef((props, ref) => {
               ]}
             >
               <Select
-                style={{ width: '20%' }}
                 placeholder={t('route.routeForm.matchType')}
               >
                 <Option value="PRE">{t('route.matchTypes.PRE')}</Option>
@@ -213,7 +212,7 @@ const RouteForm: React.FC = forwardRef((props, ref) => {
                 },
               ]}
             >
-              <Input style={{ width: '60%' }} placeholder={t('route.routeForm.pathMatcherPlacedholder')} />
+              <Input placeholder={t('route.routeForm.pathMatcherPlacedholder')} />
             </Form.Item>
             <Form.Item
               name={['path', 'ignoreCase']}
@@ -225,10 +224,10 @@ const RouteForm: React.FC = forwardRef((props, ref) => {
                     label: t('route.routeForm.caseInsensitive'), value: 'ignore',
                   },
                 ]}
-                style={{ width: '18%', display: 'inline-flex', marginLeft: 12, marginTop: 4 }}
+                style={{ display: 'inline-flex', marginLeft: 12, marginTop: 4 }}
               />
             </Form.Item>
-          </Input.Group>
+          </Space.Compact>
         </Form.Item>
         <Form.Item
           label={t('route.routeForm.method')}

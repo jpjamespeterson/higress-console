@@ -3,7 +3,7 @@ import { createWasmPlugin, deleteWasmPlugin, getGatewayRouteDetail, updateWasmPl
 import { RedoOutlined } from '@ant-design/icons';
 import { PageContainer } from '@ant-design/pro-layout';
 import { useRequest } from 'ahooks';
-import { Button, Col, PageHeader, Row, Spin, message } from 'antd';
+import { Button, Col, Row, Spin, message } from 'antd';
 import { history, useSearchParams } from 'ice';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -98,16 +98,13 @@ export default function RouterConfig() {
 
   return (
     <div className={styles.routeConfig}>
-      {!!pageHeader.title && (
-        <PageHeader
+      <Spin spinning={loading}>
+        <PageContainer
           className="hi-page-container-warp"
           title={pageHeader.title}
-          onBack={handleBack}
+          onBack={pageHeader.title ? handleBack : undefined}
           subTitle={pageHeader.subTitle}
-        />
-      )}
-      <Spin spinning={loading}>
-        <PageContainer>
+        >
           <div
             style={{
               background: '#fff',

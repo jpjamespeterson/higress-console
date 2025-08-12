@@ -2,6 +2,7 @@ import { defineConfig } from "@ice/app";
 import request from "@ice/plugin-request";
 import store from "@ice/plugin-store";
 import auth from "@ice/plugin-auth";
+import antd from '@ice/plugin-antd';
 import path from 'path';
 import CopyPlugin from 'copy-webpack-plugin';
 import { fileURLToPath } from 'url';
@@ -27,6 +28,16 @@ export default defineConfig(() => ({
     request(),
     store(),
     auth(),
+    antd({
+      theme: {
+        token: {
+          colorPrimary: '#1A2B4C',
+          borderRadius: 8,
+          wireframe: false,
+          colorTextHeading: '#0B1A2B',
+        },
+      },
+    }),
   ],
   webpack: (config) => {
     config.plugins = config.plugins || [];

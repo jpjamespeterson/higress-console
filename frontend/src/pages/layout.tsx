@@ -10,6 +10,7 @@ import { Route } from '@ant-design/pro-layout/es/typing';
 import { Result } from 'antd';
 import { Link, Outlet, useLocation } from 'ice';
 import { useTranslation } from 'react-i18next';
+import { AntdThemeProvider } from '../antdConfig';
 import styles from './layout.module.css';
 import defaultProps from './_defaultProps';
 
@@ -31,56 +32,58 @@ export default function Layout() {
 
   const route = findRouteByPath(defaultProps.route, location.pathname);
   return (
-    <ProLayout
-      {...defaultProps}
-      className={styles.layout}
-      logo={<img src={logo} alt="logo" />}
-      pure={route && !!route.usePureLayout}
-      title=""
-      location={{
-        pathname: location.pathname,
-      }}
-      layout="mix"
-      rightContentRender={() => (
-        <div style={{ display: 'flex', alignItems: 'center' }}>
-          <Navbar />
-          <LanguageDropdown />
-          <AvatarDropdown avatar={userState.currentUser.avatarUrl || ''} name={userState.currentUser.displayName} />
-        </div>
-      )}
-      pageTitleRender={(props, defaultPageTitle) => {
-        return (route && route.name ? t(route.name) : defaultPageTitle) || '';
-      }}
-      menu={{ defaultOpenAll: true }}
-      menuDataRender={(items) => {
-        function filterMenuItem(item) {
-          if (item.hideFromMenu) {
-            return false;
+    <AntdThemeProvider>
+      <ProLayout
+        {...defaultProps}
+        className={styles.layout}
+        logo={<img src={logo} alt="logo" />}
+        pure={route && !!route.usePureLayout}
+        title=""
+        location={{
+          pathname: location.pathname,
+        }}
+        layout="mix"
+        rightContentRender={() => (
+          <div style={{ display: 'flex', alignItems: 'center' }}>
+            <Navbar />
+            <LanguageDropdown />
+            <AvatarDropdown avatar={userState.currentUser.avatarUrl || ''} name={userState.currentUser.displayName} />
+          </div>
+        )}
+        pageTitleRender={(props, defaultPageTitle) => {
+          return (route && route.name ? t(route.name) : defaultPageTitle) || '';
+        }}
+        menu={{ defaultOpenAll: true }}
+        menuDataRender={(items) => {
+          function filterMenuItem(item) {
+            if (item.hideFromMenu) {
+              return false;
+            }
+            if (typeof item.visiblePredicate === 'function') {
+              return item.visiblePredicate(configData);
+            }
+            return true;
           }
-          if (typeof item.visiblePredicate === 'function') {
-            return item.visiblePredicate(configData);
+          function translateMenuItem(item) {
+            return Object.assign({}, item, {
+              name: t(item.name || ''),
+              children: item.children && item.children.filter(filterMenuItem).map(translateMenuItem) || null,
+            })
           }
-          return true;
-        }
-        function translateMenuItem(item) {
-          return Object.assign({}, item, {
-            name: t(item.name || ''),
-            children: item.children && item.children.filter(filterMenuItem).map(translateMenuItem) || null,
-          })
-        }
-        return items.filter(filterMenuItem).map(translateMenuItem);
-      }}
-      menuItemRender={(item, defaultDom) => {
-        if (!item.path) {
-          return defaultDom;
-        }
-        return <Link to={item.path}>{defaultDom}</Link>;
-      }}
-      footerRender={() => <Footer />}
-    >
-      <Outlet />
-      <ChatRobot />
-    </ProLayout>
+          return items.filter(filterMenuItem).map(translateMenuItem);
+        }}
+        menuItemRender={(item, defaultDom) => {
+          if (!item.path) {
+            return defaultDom;
+          }
+          return <Link to={item.path}>{defaultDom}</Link>;
+        }}
+        footerRender={() => <Footer />}
+      >
+        <Outlet />
+        <ChatRobot />
+      </ProLayout>
+    </AntdThemeProvider>
   );
 }
 

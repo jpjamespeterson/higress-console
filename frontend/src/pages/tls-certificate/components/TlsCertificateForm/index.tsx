@@ -1,5 +1,5 @@
 import { OptionItem } from '@/interfaces/common';
-import { Form, Input, Select, DatePicker } from 'antd';
+import { Form, Input, Select } from 'antd';
 import React, { forwardRef, useEffect, useImperativeHandle, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 

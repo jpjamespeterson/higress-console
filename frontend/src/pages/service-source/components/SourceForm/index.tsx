@@ -3,7 +3,6 @@ import { Route } from '@/interfaces/route';
 import { getServiceSourceTypeConfig, isNacosType, ServiceProtocols, ServiceSourceTypeConfig, ServiceSourceTypes } from '@/interfaces/service-source';
 import { getGatewayRoutes } from '@/services';
 import { Form, Input, Select } from 'antd';
-import TextArea from 'antd/lib/input/TextArea';
 import { useRequest } from 'ice';
 import React, { forwardRef, useEffect, useImperativeHandle, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -207,21 +206,23 @@ const SourceForm: React.FC = forwardRef((props, ref) => {
                 },
               ]}
             >
-              <Form.Item name="port" noStyle>
-                <Input
-                  allowClear
-                  type="number"
-                  min={1}
-                  max={65535}
-                  placeholder={t('serviceSource.serviceSourceForm.portPlaceholder')}
-                />
-              </Form.Item>
-              {
-                [ServiceSourceTypes.nacos2.key, ServiceSourceTypes.nacos3.key].indexOf(sourceType) !== -1 &&
-                (
-                  <div>{t('serviceSource.serviceSourceForm.nacos2PortNote')}</div>
-                )
-              }
+              <>
+                <Form.Item name="port" noStyle>
+                  <Input
+                    allowClear
+                    type="number"
+                    min={1}
+                    max={65535}
+                    placeholder={t('serviceSource.serviceSourceForm.portPlaceholder')}
+                  />
+                </Form.Item>
+                {
+                  [ServiceSourceTypes.nacos2.key, ServiceSourceTypes.nacos3.key].indexOf(sourceType) !== -1 &&
+                  (
+                    <div>{t('serviceSource.serviceSourceForm.nacos2PortNote')}</div>
+                  )
+                }
+              </>
             </Form.Item>
           </>
         )
@@ -430,7 +431,7 @@ const SourceForm: React.FC = forwardRef((props, ref) => {
                 },
               ]}
             >
-              <TextArea
+              <Input.TextArea
                 showCount
                 allowClear
                 maxLength={4096}
@@ -473,7 +474,7 @@ const SourceForm: React.FC = forwardRef((props, ref) => {
                 },
               ]}
             >
-              <TextArea
+              <Input.TextArea
                 showCount
                 allowClear
                 maxLength={4096}
