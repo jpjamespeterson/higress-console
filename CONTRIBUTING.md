@@ -238,3 +238,27 @@ Higress Console 采用了前后端分离的架构设计，所以项目由前端�
 1. `RouteController` 负责接受外部请求，并调用 `RouteService` 接口完成相关操作并把结果返回给调用方；
 2. `RouteService`的实现会使用`KubernetesModelConverter`将调用方传来的业务模型转换为 K8s CRD 数据，并调用 `KubernetesClientService`完成最终的读写操作；
 3. `KubernetesClientService` 通过 Kubernetes Client SDK 调用 K8s API，完成实际的数据读写操作。 
+
+## Security Disclosure Process
+
+If you discover a security vulnerability, please report it to us privately. Do not disclose it publicly until we have had a chance to address it.
+
+Please email the security team at `security@example.com` with the following information:
+- A description of the vulnerability.
+- Steps to reproduce the vulnerability.
+- Any proof-of-concept code.
+- Any screenshots or videos that might be helpful.
+
+We will acknowledge your report within 48 hours and will work with you to understand and fix the vulnerability. We will also coordinate with you on the public disclosure of the vulnerability.
+
+## Release Checklist
+
+Before a new release, the following checklist must be completed:
+
+- [ ] All new features are documented.
+- [ ] All new features have corresponding tests.
+- [ ] All tests are passing.
+- [ ] The `CHANGELOG.md` file has been updated.
+- [ ] The release has been approved by the release manager.
+- [ ] The release has been tagged in Git.
+- [ ] The release has been published to the package registry.

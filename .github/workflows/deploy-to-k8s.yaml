@@ -82,6 +82,16 @@ jobs:
           tags: ${{steps.docker-meta.outputs.tags}}
           labels: ${{steps.docker-meta.outputs.labels}}
 
+      - name: Scan image with Trivy
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: '${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.docker-meta.outputs.version }}'
+          format: 'table'
+          exit-code: '1'
+          ignore-unfixed: true
+          vuln-type: 'os,library'
+          severity: 'CRITICAL,HIGH'
+
       # - name: Deploy
       #   uses: wahyd4/kubectl-helm-action@master
       #   if: inputs.skipDeployment != true

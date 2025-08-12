@@ -125,6 +125,32 @@ certmanager:
 o11y:
   __placeholder__: true
 
+rbac:
+  enabled: true
+
+oidc:
+  enabled: false
+  issuerUri: ""
+  clientId: ""
+  clientSecret: ""
+
+canary:
+  enabled: false
+
+livenessProbe:
+  httpGet:
+    path: /healthz
+    port: 8080
+  initialDelaySeconds: 10
+  periodSeconds: 10
+
+readinessProbe:
+  httpGet:
+    path: /healthz
+    port: 8080
+  initialDelaySeconds: 10
+  periodSeconds: 10
+
 pvc:
   __placeholder__: true
 

@@ -74,6 +74,17 @@ spec:
             - name: HIGRESS_ADMIN_WASM_PLUGIN_CUSTOM_IMAGE_URL_PATTERN
               value: "{{ .Values.pluginServer.urlPattern }}"
             {{- end }}
+            {{- if .Values.oidc.enabled }}
+            - name: SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI
+              value: {{ .Values.oidc.issuerUri }}
+            - name: HIGRESS_CONSOLE_OIDC_CLIENT_ID
+              value: {{ .Values.oidc.clientId }}
+            - name: HIGRESS_CONSOLE_OIDC_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "higress-console.name" . }}-oidc
+                  key: clientSecret
+            {{- end }}
             {{- if .Values.podEnvs }}
             {{- range $key, $val := .Values.podEnvs }}
             - name: {{ $key }}
@@ -84,10 +95,10 @@ spec:
             - name: http
               containerPort: 8080
               protocol: TCP
+          livenessProbe:
+            {{- toYaml .Values.livenessProbe | nindent 12 }}
           readinessProbe:
-            httpGet:
-              path: /
-              port: http
+            {{- toYaml .Values.readinessProbe | nindent 12 }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           volumeMounts:

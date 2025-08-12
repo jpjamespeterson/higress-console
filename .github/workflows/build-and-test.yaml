@@ -24,6 +24,12 @@ jobs:
       - name: Build Higress Console Package
         run: mvn clean package -f ./backend/pom.xml -Dpmd.language=en
 
+      - name: SonarCloud Scan
+        uses: sonarsource/sonarcloud-github-action@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
       - name: Upload Higress Console Package
         uses: actions/upload-artifact@v4
         with:
