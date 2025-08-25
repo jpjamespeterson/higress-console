@@ -1,0 +1,37 @@
+<button (click)="onShowDrawer()">Create Domain</button>
+<button (click)="dataSource$ = domainService.getGatewayDomains()">Refresh</button>
+
+<table>
+  <thead>
+    <tr>
+      <th *ngFor="let column of columns">{{ column.title | translate }}</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let data of dataSource$ | async">
+      <td>{{ isDefaultDomain(data.name) ? ("domain.defaultDomain" | translate) : data.name }}</td>
+      <td>{{ data.protocol }}</td>
+      <td>{{ data.certIdentifier || "-" }}</td>
+      <td>
+        <a (click)="onEditDrawer(data)">Edit</a>
+        <a *ngIf="!isDefaultDomain(data.name)" (click)="onShowModal(data)">Delete</a>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<div *ngIf="openDrawer">
+  <h2>{{ currentDomain ? "Edit Domain" : "Create Domain" | translate }}</h2>
+  <form [formGroup]="form">
+    <!-- I will implement the form later -->
+  </form>
+  <button (click)="handleDrawerOK()" [disabled]="!form.valid">Confirm</button>
+  <button (click)="handleDrawerCancel()">Cancel</button>
+</div>
+
+<div *ngIf="openModal">
+  <h2>Delete</h2>
+  <p>Are you sure you want to delete {{ currentDomain?.name }}?</p>
+  <button (click)="handleModalOk()">Confirm</button>
+  <button (click)="handleModalCancel()">Cancel</button>
+</div>

@@ -1,0 +1,14 @@
+<div *ngIf="dashboardInfo$ | async as dashboardInfo; else loading">
+  <div *ngIf="dashboardInfo.url; else setup">
+    <a [href]="frameUrl" target="_blank">Open dashboard in new page</a>
+    <iframe style="width: 100%; height: 100vh; border: 0; flex: 1" [src]="frameUrl"></iframe>
+  </div>
+
+  <ng-template #setup>
+    <h1>Dashboard not configured</h1>
+  </ng-template>
+</div>
+
+<ng-template #loading>
+  <p>Loading...</p>
+</ng-template>

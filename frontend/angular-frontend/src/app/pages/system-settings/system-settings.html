@@ -1,0 +1,14 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+  <h2>{{ "system.higress-config.title" | translate }}</h2>
+  <div>
+    <app-code-editor
+      [code]="configYaml$ | async"
+      language="yaml"
+      formControlName="configYaml"
+    ></app-code-editor>
+  </div>
+  <div>
+    <p>{{ (mode$ | async) === "k8s" ? "system.higress-config.note_k8s" : "system.higress-config.note_standalone" | translate }}</p>
+  </div>
+  <button type="submit" [disabled]="!form.valid">Submit</button>
+</form>

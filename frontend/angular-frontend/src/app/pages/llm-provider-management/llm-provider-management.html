@@ -1,0 +1,39 @@
+<button (click)="onShowDrawer()">Create AI Service Provider</button>
+<button (click)="dataSource$ = llmProviderService.getLlmProviders()">Refresh</button>
+
+<table>
+  <thead>
+    <tr>
+      <th *ngFor="let column of columns">{{ column.title | translate }}</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let data of dataSource$ | async">
+      <td>{{ getProviderLabel(data.type) }}</td>
+      <td>{{ data.name }}</td>
+      <td>{{ getEndpoints(data) }}</td>
+      <td>{{ getTokens(data) }}</td>
+      <td>{{ data.proxyName || "-" }}</td>
+      <td>
+        <a (click)="onEditDrawer(data)">Edit</a>
+        <a (click)="onShowModal(data)">Delete</a>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<div *ngIf="openDrawer">
+  <h2>{{ currentLlmProvider ? "Edit AI Service Provider" : "Create AI Service Provider" | translate }}</h2>
+  <form [formGroup]="form">
+    <!-- I will implement the form later -->
+  </form>
+  <button (click)="handleDrawerOK()" [disabled]="!form.valid">Confirm</button>
+  <button (click)="handleDrawerCancel()">Cancel</button>
+</div>
+
+<div *ngIf="openModal">
+  <h2>Delete</h2>
+  <p>Are you sure you want to delete {{ currentLlmProvider?.name }}?</p>
+  <button (click)="handleModalOk()">Confirm</button>
+  <button (click)="handleModalCancel()">Cancel</button>
+</div>

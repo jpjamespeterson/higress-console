@@ -1,0 +1,47 @@
+<button (click)="onShowDrawer()">Create MCP Service</button>
+
+<form [formGroup]="searchForm">
+  <input type="text" formControlName="name" placeholder="Service Name">
+  <select formControlName="type">
+    <option value="">All Types</option>
+    <option *ngFor="let type of serviceTypes" [value]="type">{{ type }}</option>
+  </select>
+  <button type="button" (click)="onSearch()">Search</button>
+  <button type="button" (click)="onReset()">Reset</button>
+</form>
+
+<table>
+  <thead>
+    <tr>
+      <th *ngFor="let column of columns">{{ column.title | translate }}</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let data of dataSource$ | async">
+      <td><a (click)="goToDetail(data.name)">{{ data.name }}</a></td>
+      <td>{{ data.description }}</td>
+      <td>{{ data.type }}</td>
+      <td>
+        <a (click)="goToDetail(data.name)">Detail</a>
+        <a (click)="onEditDrawer(data)">Edit</a>
+        <a (click)="onShowModal(data)">Delete</a>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<div *ngIf="openDrawer">
+  <h2>{{ currentMcpServer ? "Edit MCP Service" : "Create MCP Service" | translate }}</h2>
+  <form [formGroup]="form">
+    <!-- I will implement the form later -->
+  </form>
+  <button (click)="handleDrawerOK()" [disabled]="!form.valid">Confirm</button>
+  <button (click)="handleDrawerCancel()">Cancel</button>
+</div>
+
+<div *ngIf="openModal">
+  <h2>Delete</h2>
+  <p>Are you sure you want to delete {{ currentMcpServer?.name }}?</p>
+  <button (click)="handleModalOk()">Confirm</button>
+  <button (click)="handleModalCancel()">Cancel</button>
+</div>

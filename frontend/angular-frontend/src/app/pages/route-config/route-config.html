@@ -1,0 +1,52 @@
+<div *ngIf="routeManagementSupported$ | async; else unsupported">
+  <button (click)="onShowDrawer()">Create Route</button>
+  <button (click)="dataSource$ = routeService.getGatewayRoutes()">Refresh</button>
+
+  <table>
+    <thead>
+      <tr>
+        <th *ngFor="let column of columns">{{ column.title | translate }}</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let data of dataSource$ | async">
+        <td>{{ data.name }}</td>
+        <td>{{ data.domains?.join(", ") || "-" }}</td>
+        <td>{{ getMatchType(data.path?.matchType) | translate }} | {{ data.path?.matchValue }}</td>
+        <td>
+          <div *ngFor="let service of data.services">
+            {{ getUpstreamService(service) }}
+          </div>
+        </td>
+        <td>{{ getAuthConfig(data.authConfig) | translate }}</td>
+        <td>
+          <a (click)="onEditDrawer(data)">Edit</a>
+          <a (click)="onShowModal(data)">Delete</a>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div *ngIf="openDrawer">
+    <h2>{{ currentRoute ? "Edit Route" : "Create Route" | translate }}</h2>
+    <form [formGroup]="form">
+      <!-- I will implement the form later -->
+    </form>
+    <button (click)="handleDrawerOK()" [disabled]="!form.valid">Confirm</button>
+    <button (click)="handleDrawerCancel()">Cancel</button>
+  </div>
+
+  <div *ngIf="openModal">
+    <h2>Delete</h2>
+    <p>Are you sure you want to delete {{ currentRoute?.name }}?</p>
+    <button (click)="handleModalOk()">Confirm</button>
+    <button (click)="handleModalCancel()">Cancel</button>
+  </div>
+</div>
+
+<ng-template #unsupported>
+  <div>
+    <h2>Route management not supported</h2>
+    <p>Route management feature does not support Kubenetes with version &lt; 1.19.0 at the moment.</p>
+  </div>
+</ng-template>

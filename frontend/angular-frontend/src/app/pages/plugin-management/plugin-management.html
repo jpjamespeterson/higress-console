@@ -1,0 +1,35 @@
+<button (click)="onShowDrawer()">Add Plugin</button>
+<button (click)="dataSource$ = pluginService.getWasmPlugins()">Refresh</button>
+
+<div *ngIf="name && type">
+  <button (click)="goBack()">Back</button>
+  <h2>{{ "plugins.title" | translate }}</h2>
+  <h3>{{ "plugins.subTitle." + type | translate }}{{ name }}</h3>
+</div>
+
+<table>
+  <thead>
+    <tr>
+      <th *ngFor="let column of columns">{{ column.title | translate }}</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let data of dataSource$ | async">
+      <td>{{ data.title }}</td>
+      <td>{{ data.description }}</td>
+      <td>
+        <a (click)="onEditDrawer(data)">Edit</a>
+        <a (click)="onDelete(data.name)">Delete</a>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<div *ngIf="openDrawer">
+  <h2>{{ currentPlugin ? "Edit Plugin" : "Add Plugin" | translate }}</h2>
+  <form [formGroup]="form">
+    <!-- I will implement the form later -->
+  </form>
+  <button (click)="handleDrawerOK()" [disabled]="!form.valid">Confirm</button>
+  <button (click)="handleDrawerCancel()">Cancel</button>
+</div>

@@ -1,0 +1,25 @@
+<form [formGroup]="form">
+  <input type="text" formControlName="name" placeholder="Service Name">
+  <select formControlName="namespace">
+    <option value="">All Namespaces</option>
+    <option *ngFor="let ns of namespaces$ | async" [value]="ns.value">{{ ns.label }}</option>
+  </select>
+  <button type="button" (click)="onReset()">Reset</button>
+  <button type="button" (click)="refresh()">Refresh</button>
+</form>
+
+<table>
+  <thead>
+    <tr>
+      <th *ngFor="let column of columns">{{ column.title | translate }}</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let data of dataSource$ | async">
+      <td>{{ data.name || "-" }}</td>
+      <td>{{ data.port || "-" }}</td>
+      <td>{{ data.namespace }}</td>
+      <td>{{ data.endpoints?.join(", ") || "-" }}</td>
+    </tr>
+  </tbody>
+</table>

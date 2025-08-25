@@ -1,0 +1,68 @@
+<button (click)="onShowDrawer()">Create Service Source</button>
+<button>Manage Proxy Servers</button>
+<button (click)="dataSource$ = serviceSourceService.getServiceSources()">Refresh</button>
+
+<table>
+  <thead>
+    <tr>
+      <th *ngFor="let column of columns">{{ column.title | translate }}</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let data of dataSource$ | async">
+      <td>{{ getServiceSourceName(data.type) }}</td>
+      <td>{{ data.name }}</td>
+      <td>{{ data.domain || "-" }}</td>
+      <td>{{ data.port || "-" }}</td>
+      <td>{{ getProtocolName(data.protocol) || "-" }}</td>
+      <td>{{ data.proxyName || "-" }}</td>
+      <td>
+        <a (click)="onEditDrawer(data)">Edit</a>
+        <a (click)="onShowModal(data)">Delete</a>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<div *ngIf="openDrawer">
+  <h2>{{ currentServiceSource ? "Edit Service Source" : "Create Service Source" | translate }}</h2>
+  <form [formGroup]="form">
+    <div>
+      <label for="name">Name</label>
+      <input id="name" type="text" formControlName="name">
+    </div>
+    <div>
+      <label for="type">Type</label>
+      <select id="type" formControlName="type">
+        <option *ngFor="let type of objectKeys(ServiceSourceTypes)" [value]="type">{{ getServiceSourceName(type) }}</option>
+      </select>
+    </div>
+    <div>
+      <label for="domain">Domain</label>
+      <input id="domain" type="text" formControlName="domain">
+    </div>
+    <div>
+      <label for="port">Port</label>
+      <input id="port" type="number" formControlName="port">
+    </div>
+    <div>
+      <label for="protocol">Protocol</label>
+      <select id="protocol" formControlName="protocol">
+        <option *ngFor="let protocol of objectKeys(ServiceProtocols)" [value]="protocol">{{ getProtocolName(protocol) }}</option>
+      </select>
+    </div>
+    <div>
+      <label for="proxyName">Proxy Name</label>
+      <input id="proxyName" type="text" formControlName="proxyName">
+    </div>
+  </form>
+  <button (click)="handleDrawerOK()" [disabled]="!form.valid">Confirm</button>
+  <button (click)="handleDrawerCancel()">Cancel</button>
+</div>
+
+<div *ngIf="openModal">
+  <h2>Delete</h2>
+  <p>Are you sure you want to delete {{ currentServiceSource?.name }}?</p>
+  <button (click)="handleModalOk()">Confirm</button>
+  <button (click)="handleModalCancel()">Cancel</button>
+</div>
