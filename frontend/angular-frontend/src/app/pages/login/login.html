@@ -1,0 +1,21 @@
+<div class="container">
+  <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+    <div>
+      <label for="username">Username</label>
+      <input id="username" type="text" formControlName="username">
+    </div>
+    <div>
+      <label for="password">Password</label>
+      <input id="password" type="password" formControlName="password">
+    </div>
+    <div>
+      <input id="autoLogin" type="checkbox" formControlName="autoLogin">
+      <label for="autoLogin">Auto login</label>
+      <a href="#">Forgot password</a>
+    </div>
+    <div *ngIf="loginPrompt$ | async as prompt">
+      {{ prompt }}
+    </div>
+    <button type="submit" [disabled]="!loginForm.valid">Login</button>
+  </form>
+</div>

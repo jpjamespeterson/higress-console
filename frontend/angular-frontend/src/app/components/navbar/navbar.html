@@ -1,0 +1,11 @@
+<ul>
+  <li *ngFor="let item of linkList">
+    <a [href]="item.link" target="_blank">{{ item.name | translate }}</a>
+  </li>
+  <li>
+    <a href="https://github.com/alibaba/higress" target="_blank">
+      <!-- I will add the github icon later -->
+      Github
+    </a>
+  </li>
+</ul>

@@ -1,0 +1,7 @@
+<div style="text-align: center; margin: 10px;">
+  &copy; {{ currentYear }} Higress
+  <ng-container *ngIf="version$ | async as version">
+    <br />
+    v{{ version }}
+  </ng-container>
+</div>

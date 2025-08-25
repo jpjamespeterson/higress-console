@@ -1,0 +1,12 @@
+<div>
+  <h1>{{ "navbar.officialWebsite" | translate }}</h1>
+  <p>{{ "menu.dashboard" | translate }}</p>
+
+  <div>
+    <button (click)="languageService.setLanguage(\"en-US\")">English</button>
+    <button (click)="languageService.setLanguage(\"zh-CN\")">中文</button>
+    <button (click)="languageService.setLanguage(\"tr-TR\")">Türkçe</button>
+  </div>
+</div>
+
+<router-outlet></router-outlet>

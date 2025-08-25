@@ -1,0 +1,12 @@
+<div *ngIf="currentUser$ | async as currentUser">
+  <button>
+    <img [src]="currentUser.avatarUrl || https://gw.alipayobjects.com/zos/antfincdn/XAosXuNZyF/BiazfanxmamNRoxxVxka.png" alt="avatar">
+    <span>{{ currentUser.displayName }}</span>
+  </button>
+  <div>
+    <ul>
+      <li (click)="changePassword()">Change Password</li>
+      <li (click)="logout()">Logout</li>
+    </ul>
+  </div>
+</div>

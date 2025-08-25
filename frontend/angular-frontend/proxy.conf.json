@@ -1,0 +1,7 @@
+{
+  "/api": {
+    "target": "http://demo.higress.io",
+    "secure": false,
+    "changeOrigin": true
+  }
+}

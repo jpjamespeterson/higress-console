@@ -1,0 +1,106 @@
+<div *ngIf="dashboardInfo$ | async as dashboardInfo; else loading">
+  <div *ngIf="dashboardInfo.url && !reconfiguring; else setup">
+    <button (click)="reconfiguring = true">Reconfigure</button>
+    <a [href]="frameUrl" target="_blank">Open dashboard in new page</a>
+    <iframe style="width: 100%; height: 100vh; border: 0; flex: 1" [src]="frameUrl"></iframe>
+  </div>
+
+  <ng-template #setup>
+    <div *ngIf="dashboardInfo.builtIn; else configure">
+      <h1>Dashboard not initialized</h1>
+      <button (click)="initDashboard()">Initialize Dashboard</button>
+    </div>
+  </ng-template>
+
+  <ng-template #configure>
+    <form [formGroup]="form">
+      <h3>Configure Dashboard</h3>
+      <div>
+        <label for="url">Dashboard URL</label>
+        <input id="url" type="url" formControlName="url">
+        <button (click)="setDashboardUrl()" [disabled]="!form.get("url").valid">Confirm</button>
+      </div>
+    </form>
+
+    <div>
+      <h3>Notes on External Dashboard Configuraiton</h3>
+      <p>It is recommended to configure Higress dashboard with Prometheus + Grafana.</p>
+      <ol>
+        <li *ngIf="(mode$ | async) === k8s; else standalone">
+          When adding Prometheus collection configurations to get metrics of Higress Gateway Pods, please add following relabel_config items:
+          <pre>
+            - regex: __meta_kubernetes_pod_label_(.+)
+              action: labelmap
+            - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_scrape]
+              action: keep
+              regex: true
+            - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_path]
+              action: replace
+              target_label: __metrics_path__
+              regex: (.+)
+            - source_labels: [__address__, __meta_kubernetes_pod_annotation_prometheus_io_port]
+              action: replace
+              regex: ([^:]+)(?::\d+)?;(\d+)
+              replacement: $1:$2
+              target_label: __address__
+            - action: labelmap
+              regex: __meta_kubernetes_pod_label_(.+)
+            - source_labels: [__meta_kubernetes_namespace]
+              action: replace
+              target_label: kubernetes_namespace
+            - source_labels: [__meta_kubernetes_pod_name]
+              action: replace
+              target_label: kubernetes_pod_name
+          </pre>
+        </li>
+        <ng-template #standalone>
+          <li>You can use the following URL in Prometheus to get metrics of Higress Gateway: http://{GatewayIP}:{MetricsPort}/stats/prometheus The default value of MetricsPort is 15020.</li>
+        </ng-template>
+        <li>
+          Configure Grafana so dashboard can be displayed within this page.
+          <ul>
+            <li>
+              If configured with grafana.ini, please add following items into the file:
+              <pre>
+                [security]
+                cookie_secure=true
+                cookie_samesite=none
+                allow_embedding=true
+              </pre>
+            </li>
+            <li>
+              If configured with environment variables, please configure following variables:
+              <pre>
+                GF_SECURITY_COOKIE_SECURE=true
+                GF_SECURITY_COOKIE_SAMESITE=none
+                GF_SECURITY_ALLOW_EMBEDDING=true
+              </pre>
+            </li>
+          </ul>
+        </li>
+        <li>
+          We recommend you using the built-in dashboard configuration of Higress. You can input the UID of the Prometheus data source in Grafana and download the JSON configuration file for import. (<a>How to obtain the UID of a data source?</a>)
+          <form [formGroup]="form" (ngSubmit)="downloadConfigFile()">
+            <div>
+              <label for="dataSourceUid">Prometheus Data Source UID</label>
+              <input id="dataSourceUid" type="text" formControlName="dataSourceUid">
+            </div>
+            <div>
+              <label for="type">Template</label>
+              <select id="type" formControlName="type">
+                <option value="MAIN">Generic Gateway Dashboard Template</option>
+                <option value="AI">AI Gateway Dashboard Template</option>
+              </select>
+            </div>
+            <button type="submit" [disabled]="!form.get("dataSourceUid").valid || !form.get("type").valid">Download Config File</button>
+          </form>
+        </li>
+        <li>Input the HTTPS URL of Grafana is highly recommended to ensure the dashboard can be shown with in this page correctly.</li>
+      </ol>
+    </div>
+  </ng-template>
+</div>
+
+<ng-template #loading>
+  <p>Loading...</p>
+</ng-template>
